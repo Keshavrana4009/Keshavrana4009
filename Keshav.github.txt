@@ -1,0 +1,86 @@
+class AttendanceTracker:
+    def __init__(self):
+        self.students = {}
+        self.attendance_records = {}
+        
+    def add_student(self, student_id, name):
+        self.students[student_id] = name
+        self.attendance_records[student_id] = []
+        
+    def record_attendance(self, student_id, status):
+        # status can be "Present", "Absent", "Excused", "Late"
+        if student_id in self.attendance_records:
+            self.attendance_records[student_id].append(status)
+        else:
+            print(f"Student ID {student_id} not found.")
+    
+    def generate_student_report(self, student_id):
+        if student_id not in self.attendance_records:
+            print(f"No records found for Student ID {student_id}")
+            return
+        
+        records = self.attendance_records[student_id]
+        total_days = len(records)
+        present_days = records.count("Present")
+        excused_days = records.count("Excused")
+        late_days = records.count("Late")
+        absent_days = records.count("Absent")
+        
+        print(f"Report for {self.students[student_id]}:")
+        print(f"Total Days: {total_days}")
+        print(f"Present: {present_days}")
+        print(f"Absent: {absent_days}")
+        print(f"Excused: {excused_days}")
+        print(f"Late: {late_days}")
+        
+    def generate_class_report(self):
+        total_students = len(self.students)
+        total_days = sum(len(records) for records in self.attendance_records.values())
+        total_present = sum(records.count("Present") for records in self.attendance_records.values())
+        total_absent = sum(records.count("Absent") for records in self.attendance_records.values())
+        total_excused = sum(records.count("Excused") for records in self.attendance_records.values())
+        total_late = sum(records.count("Late") for records in self.attendance_records.values())
+        
+        print("Class Report:")
+        print(f"Total Students: {total_students}")
+        print(f"Total Attendance Days Recorded: {total_days}")
+        print(f"Total Present: {total_present}")
+        print(f"Total Absent: {total_absent}")
+        print(f"Total Excused: {total_excused}")
+        print(f"Total Late: {total_late}")
+
+# Example usage
+tracker = AttendanceTracker()
+students = [
+    (1, "Keshav Rana"),
+    (2, "Rishit Pal"),
+    (3, "Lakshay Saini"),
+    (4, "Anirudh Badas"),
+    (5, "Jatin"),
+    (6, "Garveet"),
+    (7, "Daksh"),
+    (8, "Ram"),
+    (9, "Niyati Sharma"),
+    (10, "Tony")
+]
+
+for student_id, name in students:
+    tracker.add_student(student_id, name)
+
+# Recording attendance
+attendance_records = [
+    (1, "Present"), (2, "Absent"), (3, "Late"), (4, "Excused"),
+    (5, "Present"), (6, "Present"), (7, "Absent"), (8, "Late"),
+    (9, "Excused"), (10, "Present"), (1, "Late"), (2, "Excused"),
+    (3, "Present"), (4, "Absent"), (5, "Present"), (6, "Late"),
+    (7, "Excused"), (8, "Present"), (9, "Absent"), (10, "Present")
+]
+
+for student_id, status in attendance_records:
+    tracker.record_attendance(student_id, status)
+
+# Generating reports
+tracker.generate_student_report(1)
+tracker.generate_student_report(2)
+tracker.generate_student_report(3)
+tracker.generate_class_report()
